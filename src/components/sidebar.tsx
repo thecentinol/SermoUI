@@ -16,7 +16,7 @@ export default function Sidebar() {
 			<div className="h-full">
 				<p className="text-(--text-muted) pl-1">Chats</p>
 				<div className="overflow-y-auto">
-					<p className="flex items-center justify-between hover:bg-(--fg-hover) px-4 py-2 rounded-md">
+					<p className="flex items-center justify-between hover:bg-(--fg-hover) pl-4 py-2 rounded-md">
 						Example
 						<Ellipsis className="cursor-pointer" />
 					</p>
