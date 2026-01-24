@@ -7,7 +7,7 @@ export default function Sidebar() {
 			<h1 className="h-[5%]">SermoUI</h1>
 			<div className="h-[12%]">
 				<p className="text-(--text-muted) pl-1">Actions</p>
-				<Button className="justify-start w-full rounded-md hover:bg-(--fg-elevated) cursor-pointer p-1">
+				<Button className="justify-start w-full p-1">
 					<PlusIcon />
 					New Chat
 				</Button>
@@ -16,7 +16,7 @@ export default function Sidebar() {
 			<div className="h-full">
 				<p className="text-(--text-muted) pl-1">Chats</p>
 				<div className="overflow-y-auto">
-					<p className="flex items-center justify-between hover:bg-(--fg-hover) pl-4 py-2 rounded-md">
+					<p className="flex items-center justify-between hover:bg-(--fg-hover) px-4 py-2 rounded-md">
 						Example
 						<Ellipsis className="cursor-pointer" />
 					</p>
