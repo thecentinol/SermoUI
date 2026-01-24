@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { sendChatMessage } from "../services/OllamaApi";
 
-const BASE_URL = "http://localhost:11434/api";
-
 export interface Chat {
-	id: number;
+	id: string;
 	title: string;
 	messages: Message[];
 	createdAt: number;
@@ -12,8 +10,8 @@ export interface Chat {
 }
 
 export interface Message {
-	id: number;
-	chatId: Chat["id"];
+	id: string;
+	chatId: string;
 	role: "user" | "assistant";
 	model: string;
 	content: string;
@@ -22,7 +20,7 @@ export interface Message {
 
 export function useChats() {
 	const [chats, setChats] = useState<Chat[]>([]);
-	const [currChatId, setCurrChatId] = useState<number | null>(null);
+	const [currChatId, setCurrChatId] = useState<string | null>(null);
 	const [isLoading, setisLoading] = useState(false);
 	const STORAGE_KEY = "ollama-chats";
 
@@ -46,19 +44,44 @@ export function useChats() {
 
 	const createChat = () => {
 		const newChat: Chat = {
-			id: Date.now(),
+			id: crypto.randomUUID(),
 			title: "New Chat",
 			messages: [],
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
 		};
 		setChats([...chats, newChat]);
-		setCurrChatId(newChat.id);
+		return newChat.id;
+	};
+
+	const sendMessage = async (
+		chatId: string,
+		model: string,
+		content: string,
+	) => {
+		if (!chatId) {
+			createChat();
+		}
+		setisLoading(true);
+
+		const userMsg: Message = {
+			id: crypto.randomUUID(),
+			chatId: currChatId,
+			role: "user",
+			model: model,
+			content: content,
+			timestamp: Date.now(),
+		};
+		setChats([...chats, currChatId]);
 	};
 
 	return {
 		chats,
 		currChatId,
 		isLoading,
+		loadChats,
+		saveChats,
+		createChat,
+		sendMessage,
 	};
 }
