@@ -44,6 +44,18 @@ export function useChats() {
 		saveChats(chats);
 	}, [chats]);
 
+	const createChat = () => {
+		const newChat: Chat = {
+			id: Date.now(),
+			title: "New Chat",
+			messages: [],
+			createdAt: Date.now(),
+			updatedAt: Date.now(),
+		};
+		setChats([...chats, newChat]);
+		setCurrChatId(newChat.id);
+	};
+
 	return {
 		chats,
 		currChatId,
