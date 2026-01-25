@@ -26,16 +26,19 @@ export default function ChatView() {
 	};
 
 	return (
-		<div className="flex flex-1">
+		<div className="flex flex-1 h-full">
 			<div className="flex-1 flex justify-center items-center">
-				<div className="flex flex-col h-screen w-[50vw]">
-					<div ref={scrollRef} className="flex-1 overflow-y-auto p-4">
+				<div className="flex flex-col h-full w-[50vw] relative">
+					<div
+						ref={scrollRef}
+						className="flex-1 overflow-y-auto scrollbar-hide p-4 pb-32"
+					>
 						{messages.map((msg) => (
 							<div
 								key={msg.id}
 								className={`p-3 my-2 rounded-2xl ${
 									msg.role === "user"
-										? "bg-(--bg) self-end ml-auto text-white max-w-[70%]"
+										? "bg-(--bg) self-end ml-auto text-white max-w-[70%] w-fit"
 										: "bg-transparent self-start mr-auto text-gray-200 w-full"
 								}`}
 								style={{
@@ -56,7 +59,10 @@ export default function ChatView() {
 						{/* 	<ChevronRight className="w-5 h-5 cursor-pointer" /> */}
 						{/* </div> */}
 					</div>
-					<Input disabled={isLoading} onSend={handleSendMsg} />
+					<div className="absolute bottom-4 left-0 w-full">
+						<div className="absolute inset-0 bg-linear-to-l from-(--fg) via-(--fg)/95 to-transparent backdrop-blur-md -z-10" />
+						<Input disabled={isLoading} onSend={handleSendMsg} />
+					</div>
 				</div>
 			</div>
 		</div>
