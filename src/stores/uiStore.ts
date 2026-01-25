@@ -9,16 +9,22 @@ export type Theme =
 	| "void"
 	| "solarized";
 
+type SettingsContentType = "storage" | "model" | "appearance";
+
 export interface UIStore {
 	sidebarCollapsed: boolean;
-	settingsModalOpen: boolean;
+	toggleSidebar: () => void;
+
+	activeSettingsContent: SettingsContentType;
+	setActiveSettingsContent: (content: SettingsContentType) => void;
+	settingsOpen: boolean;
+	setSettingsOpen: (open: boolean) => void;
+
 	currentTheme: Theme;
 	setTheme: (theme: Theme) => void;
-	toggleSidebar: () => void;
-	openSettings: () => void;
-	closeSettings: () => void;
 }
 
+const defaultActiveSettingsContent: SettingsContentType = "storage";
 const defaultTheme: Theme = "default";
 
 export const useUIStore = create<UIStore>()(
@@ -28,12 +34,15 @@ export const useUIStore = create<UIStore>()(
 			toggleSidebar: () =>
 				set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
 
+			activeSettingsContent: defaultActiveSettingsContent,
+			setActiveSettingsContent: (content) =>
+				set({ activeSettingsContent: content }),
+
+			settingsOpen: false,
+			setSettingsOpen: (open) => set({ settingsOpen: open }),
+
 			currentTheme: defaultTheme,
 			setTheme: (theme) => set({ currentTheme: theme }),
-
-			settingsModalOpen: false,
-			openSettings: () => set({ settingsModalOpen: true }),
-			closeSettings: () => set({ settingsModalOpen: false }),
 		}),
 		{
 			name: "ui-storage",

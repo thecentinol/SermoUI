@@ -1,11 +1,24 @@
 import { Ellipsis, PlusIcon, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+	AppearanceSettings,
+	ModelSettings,
+	StorageSettings,
+} from "@/components/settingsContent";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useChatStore } from "@/stores/chatStore";
+import { useUIStore } from "@/stores/uiStore";
 
 export default function Sidebar() {
 	const { chats } = useChatStore();
 	const navigate = useNavigate();
+	const {
+		settingsOpen,
+		setSettingsOpen,
+		activeSettingsContent,
+		setActiveSettingsContent,
+	} = useUIStore();
 
 	return (
 		<div className="flex flex-col h-full w-[20%] bg-(--bg) text-(--text) pl-2 pr-3">
@@ -40,8 +53,40 @@ export default function Sidebar() {
 				</div>
 			</div>
 
+			{/* SETTINGS */}
 			<div className="h-[10%] border-t border-gray-500 flex items-center justify-end cursor-pointer">
-				<Settings />
+				<Settings onClick={() => setSettingsOpen(true)} />
+
+				<Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+					<DialogContent className="flex">
+						<div className="flex flex-col h-full w-[20%] border-r border-gray-400/50">
+							<Button onClick={() => setActiveSettingsContent("storage")}>
+								Storage
+							</Button>
+							<Button onClick={() => setActiveSettingsContent("model")}>
+								Model
+							</Button>
+							<Button onClick={() => setActiveSettingsContent("appearance")}>
+								Appearance
+							</Button>
+						</div>
+
+						<div className="flex flex-col h-full w-[80%] text-(--text)">
+							{(() => {
+								switch (activeSettingsContent) {
+									case "storage":
+										return <StorageSettings />;
+									case "model":
+										return <ModelSettings />;
+									case "appearance":
+										return <AppearanceSettings />;
+									default:
+										return null;
+								}
+							})()}
+						</div>
+					</DialogContent>
+				</Dialog>
 			</div>
 		</div>
 	);
