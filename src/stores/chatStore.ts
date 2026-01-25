@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { sendChatMessage } from "../services/OllamaApi";
@@ -13,7 +12,7 @@ export interface Chat {
 
 export interface Message {
 	id: string;
-	chatId: string;
+	chatId?: string;
 	role: "user" | "assistant";
 	model: string;
 	content: string;
@@ -25,7 +24,7 @@ interface ChatStore {
 	isLoading: boolean;
 	model: string;
 	setModel: (model: string) => void;
-	sendMsg: (chatId: string, model: string, content: string) => Promise<void>;
+	sendMsg: (chatId: string | null, content: string) => Promise<string | void>;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -54,6 +53,7 @@ export const useChatStore = create<ChatStore>()(
 						};
 
 						set({ chats: [...chats, newChat] });
+
 						actualChatId = newChat.id;
 						currChat = newChat;
 					} else {
@@ -83,7 +83,7 @@ export const useChatStore = create<ChatStore>()(
 					};
 
 					set({
-						chats: chats.map((chat) =>
+						chats: get().chats.map((chat) =>
 							chat.id === actualChatId
 								? {
 										...chat,

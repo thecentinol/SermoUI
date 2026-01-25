@@ -4,17 +4,16 @@ import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
-import { useChats } from "@/hooks/useChats";
+import { useChatStore } from "@/stores/chatStore";
 
 export default function ChatView() {
 	const params = useParams();
 	const chatId = params?.chatId;
-	const { chats, createChat, sendMessage, isLoading } = useChats();
+	const { chats, sendMsg, isLoading } = useChatStore();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
 	const currChat = chatId ? chats.find((c) => c.id === chatId) : null;
 	const messages = useMemo(() => currChat?.messages || [], [currChat]);
-	const [model, setModel] = useState("llama3.2:1b");
 
 	useEffect(() => {
 		if (scrollRef.current) {
@@ -23,12 +22,7 @@ export default function ChatView() {
 	}, [messages]);
 
 	const handleSendMsg = async (content: string) => {
-		if (!chatId) {
-			createChat();
-			await sendMessage(chatId, model, content);
-		} else {
-			await sendMessage(chatId, model, content);
-		}
+		await sendMsg(chatId || null, content);
 	};
 
 	return (
@@ -41,7 +35,7 @@ export default function ChatView() {
 								key={msg.id}
 								className={`p-3 my-2 rounded-2xl ${
 									msg.role === "user"
-										? "bg-(--surface) self-end ml-auto text-white max-w-[70%]"
+										? "bg-(--bg) self-end ml-auto text-white max-w-[70%]"
 										: "bg-transparent self-start mr-auto text-gray-200 w-full"
 								}`}
 								style={{

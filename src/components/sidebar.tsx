@@ -1,10 +1,10 @@
 import { Ellipsis, PlusIcon, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useChats } from "@/hooks/useChats";
+import { useChatStore } from "@/stores/chatStore";
 
 export default function Sidebar() {
-	const { chats } = useChats();
+	const { chats } = useChatStore();
 	const navigate = useNavigate();
 
 	return (
