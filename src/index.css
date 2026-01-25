@@ -15,11 +15,57 @@
 	scrollbar-width: none;
 }
 
-:root {
+[data-theme="default"] {
+	--bg: #0F1419;
+	--header: #1A1F26;
+	--fg: #1A1F26;
+	--fg-hover: #252A33;
+	--fg-elevated: #2F3540;
+	--text: #E0E0E0;
+	--text-muted: #A0A0A0;
+}
+
+[data-theme="tokyo-night"] {
+	--bg: #1A1B26;
+	--fg: #24283B;
+	--fg-hover: #2F3348;
+	--fg-elevated: #3B4252;
+	--text: #C0CAF5;
+	--text-muted: #9AA5CE;
+}
+
+[data-theme="nord"] {
+	--bg: #2E3440;
+	--fg: #3B4252;
+	--fg-hover: #434C5E;
+	--fg-elevated: #4C566A;
+	--text: #ECEFF4;
+	--text-muted: #D8DEE9;
+}
+
+[data-theme="oceanic-depth"] {
+	--bg: #0B1419;
+	--fg: #132532;
+	--fg-hover: #1A3244;
+	--fg-elevated: #224466;
+	--text: #D0E6FF;
+	--text-muted: #88BBD6;
+}
+
+[data-theme="void"] {
+	--bg: #000000;
+	--fg: #101010;
+	--fg-hover: #1A1A1A;
+	--fg-elevated: #202020;
+	--text: #FFFFFF;
+	--text-muted: #AAAAAA;
+}
+
+[data-theme="solarized"] {
 	--bg: #002B36;
 	--fg: #073642;
 	--fg-hover: #0D3A48;
 	--fg-elevated: #124559;
-	--text: #FFFFFF;
-	--text-muted: #8F8B8B;
+	--text: #EEE8D5;
+	--text-muted: #93A1A1;
 }

@@ -9,7 +9,10 @@ export default function Sidebar() {
 
 	return (
 		<div className="flex flex-col h-full w-[20%] bg-(--bg) text-(--text) pl-2 pr-3">
-			<h1 className="h-[5%]">SermoUI</h1>
+			<h1 className="flex items-center justify-start gap-2 mb-3 min-h-[5%]">
+				<img src="/logo.svg" alt="logo" width={35} height={35} />
+				SermoUI
+			</h1>
 			<div className="h-[12%]">
 				<p className="text-(--text-muted) pl-1">Actions</p>
 				<Button
@@ -28,7 +31,7 @@ export default function Sidebar() {
 						<Button
 							key={c.id}
 							onClick={() => navigate(`/chat/${c.id}`)}
-							className="flex items-center justify-between px-4 py-2"
+							className="flex items-center justify-between w-full px-4 py-2"
 						>
 							{c.title || "New Chat"}
 							<Ellipsis className="cursor-pointer" />
