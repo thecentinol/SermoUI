@@ -1,25 +1,14 @@
 import { ArrowUp } from "lucide-react";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useChats } from "@/hooks/useChats";
 
 export default function Chat() {
-	const { sendMessage, createChat, isLoading } = useChats();
+	const { sendMessage, isLoading } = useChats();
 	const [model, setModel] = useState("llama3.2:1b");
-	const navigate = useNavigate();
 
 	const handleSendMsg = async (content: string) => {
-		console.log("1. Creating chat...");
-		const newChatId = createChat();
-		console.log("2. Chat created:", newChatId);
-
-		console.log("3. Navigating...");
-		navigate(`/chat/${newChatId}`);
-
-		console.log("4. Calling sendMessage...");
-		await sendMessage(newChatId, model, content);
-		console.log("5. sendMessage completed");
+		await sendMessage(null, model, content);
 	};
 
 	return (

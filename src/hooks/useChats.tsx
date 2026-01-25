@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { sendChatMessage } from "../services/OllamaApi";
 
 export interface Chat {
@@ -23,6 +24,7 @@ export function useChats() {
 	const [currChatId, setCurrChatId] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const STORAGE_KEY = "ollama-chats";
+	const navigate = useNavigate();
 
 	function loadChats(): Chat[] {
 		const data = localStorage.getItem(STORAGE_KEY);
@@ -42,39 +44,42 @@ export function useChats() {
 		saveChats(chats);
 	}, [chats]);
 
-	const createChat = () => {
-		const newChat: Chat = {
-			id: crypto.randomUUID(),
-			title: "New Chat",
-			messages: [],
-			createdAt: Date.now(),
-			updatedAt: Date.now(),
-		};
-		setChats([...chats, newChat]);
-		return newChat.id;
-	};
-
 	const sendMessage = async (
-		chatId: string,
+		chatId: string | null,
 		model: string,
 		content: string,
 	) => {
 		console.log("sendMessage called with:", { chatId, model, content });
 		setIsLoading(true);
-		setCurrChatId(chatId);
+		let actualChatId = chatId;
+		let currChat: Chat | undefined;
 
-		const currChat = chats.find((c) => c.id === chatId);
-		console.log("FFound chat:", currChat);
+		if (!actualChatId) {
+			const newChat: Chat = {
+				id: crypto.randomUUID(),
+				title: "New Chat",
+				messages: [],
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+			};
 
-		if (!currChat) {
-			console.error("ERR: Chat not found!");
-			setIsLoading(false);
-			return;
+			setChats((prev) => [...prev, newChat]);
+			actualChatId = newChat.id;
+			currChat = newChat;
+			navigate(`/chat/${actualChatId}`);
+		} else {
+			currChat = chats.find((c) => c.id === actualChatId);
+			if (!currChat) {
+				console.error("ERR: Chat not found!");
+				setIsLoading(false);
+				console.log("FFound chat:", currChat);
+				return;
+			}
 		}
 
 		const userMsg: Message = {
 			id: crypto.randomUUID(),
-			chatId: chatId,
+			chatId: actualChatId,
 			role: "user",
 			model,
 			content,
@@ -99,7 +104,7 @@ export function useChats() {
 
 		const assistantMsg: Message = {
 			id: crypto.randomUUID(),
-			chatId: chatId,
+			chatId: actualChatId,
 			role: "assistant",
 			model,
 			content: "",
@@ -157,7 +162,6 @@ export function useChats() {
 		isLoading,
 		loadChats,
 		saveChats,
-		createChat,
 		sendMessage,
 	};
 }
