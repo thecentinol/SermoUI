@@ -9,7 +9,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Chat />}></Route>
-					<Route path="/:chatId" element={<ChatView />}></Route>
+					<Route path="/chat/:chatId" element={<ChatView />}></Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>

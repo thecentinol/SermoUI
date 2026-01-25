@@ -21,7 +21,7 @@ export interface Message {
 export function useChats() {
 	const [chats, setChats] = useState<Chat[]>([]);
 	const [currChatId, setCurrChatId] = useState<string | null>(null);
-	const [isLoading, setisLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const STORAGE_KEY = "ollama-chats";
 
 	function loadChats(): Chat[] {
@@ -59,20 +59,96 @@ export function useChats() {
 		model: string,
 		content: string,
 	) => {
-		if (!chatId) {
-			createChat();
+		console.log("sendMessage called with:", { chatId, model, content });
+		setIsLoading(true);
+		setCurrChatId(chatId);
+
+		const currChat = chats.find((c) => c.id === chatId);
+		console.log("FFound chat:", currChat);
+
+		if (!currChat) {
+			console.error("ERR: Chat not found!");
+			setIsLoading(false);
+			return;
 		}
-		setisLoading(true);
 
 		const userMsg: Message = {
 			id: crypto.randomUUID(),
-			chatId: currChatId,
+			chatId: chatId,
 			role: "user",
-			model: model,
-			content: content,
+			model,
+			content,
 			timestamp: Date.now(),
 		};
-		setChats([...chats, currChatId]);
+		setChats((prevChats) =>
+			prevChats.map((chat) =>
+				chat.id === chatId
+					? {
+							...chat,
+							messages: [...chat.messages, userMsg],
+							updatedAt: Date.now(),
+						}
+					: chat,
+			),
+		);
+
+		const OllamaMsgs = [...currChat.messages, userMsg].map((m) => ({
+			role: m.role,
+			content: m.content,
+		}));
+
+		const assistantMsg: Message = {
+			id: crypto.randomUUID(),
+			chatId: chatId,
+			role: "assistant",
+			model,
+			content: "",
+			timestamp: Date.now(),
+		};
+
+		const updatedMsgs = [...currChat.messages, userMsg];
+
+		setChats((prevChats) =>
+			prevChats.map((chat) =>
+				chat.id === chatId
+					? {
+							...chat,
+							messages: updatedMsgs,
+							updatedAt: Date.now(),
+						}
+					: chat,
+			),
+		);
+
+		try {
+			let fullContent = "";
+			console.log("About to call sendChatMessage API...");
+			await sendChatMessage(model, OllamaMsgs, (chunk) => {
+				console.log("Recieved chunk:", chunk);
+				fullContent += chunk.message.content;
+
+				setChats((prevChats) =>
+					prevChats.map((chat) =>
+						chat.id === chatId
+							? {
+									...chat,
+									messages: chat.messages.map((msg) =>
+										msg.id === assistantMsg.id
+											? { ...msg, content: fullContent }
+											: msg,
+									),
+									updatedAt: Date.now(),
+								}
+							: chat,
+					),
+				);
+			});
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading(false);
+			console.log("Msg sent");
+		}
 	};
 
 	return {
