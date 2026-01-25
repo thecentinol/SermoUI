@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useUIStore } from "@/stores/uiStore";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-	const currentTheme = useUIStore((s) => s.currentTheme);
+	const { currentTheme } = useUIStore();
 
 	useEffect(() => {
 		document.documentElement.removeAttribute("data-theme");
