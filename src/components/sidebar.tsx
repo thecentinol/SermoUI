@@ -1,4 +1,11 @@
-import { Ellipsis, PlusIcon, Settings } from "lucide-react";
+import {
+	Brain,
+	Database,
+	Ellipsis,
+	PaletteIcon,
+	PlusIcon,
+	Settings,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
 	AppearanceSettings,
@@ -60,14 +67,23 @@ export default function Sidebar() {
 				<Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
 					<DialogContent className="flex">
 						<div className="flex flex-col h-full w-[20%] border-r border-gray-400/50">
-							<Button onClick={() => setActiveSettingsContent("storage")}>
-								Storage
+							<Button
+								onClick={() => setActiveSettingsContent("storage")}
+								className="flex items-center justify-start text-lg"
+							>
+								<Database /> Storage
 							</Button>
-							<Button onClick={() => setActiveSettingsContent("model")}>
-								Model
+							<Button
+								onClick={() => setActiveSettingsContent("model")}
+								className="flex items-center justify-start text-lg"
+							>
+								<Brain /> Models
 							</Button>
-							<Button onClick={() => setActiveSettingsContent("appearance")}>
-								Appearance
+							<Button
+								onClick={() => setActiveSettingsContent("appearance")}
+								className="flex items-center justify-start text-lg"
+							>
+								<PaletteIcon /> Appearance
 							</Button>
 						</div>
 

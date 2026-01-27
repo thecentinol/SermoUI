@@ -1,3 +1,5 @@
+import type { OllamaModels } from "@/stores/uiStore";
+
 const BASE_URL = "http://localhost:11434/api";
 
 interface OllamaMessage {
@@ -19,6 +21,10 @@ interface ChatResponse {
 		content: string;
 	};
 	done: boolean;
+}
+
+interface OllamaTagsResponse {
+	models: OllamaModels[];
 }
 
 export async function sendChatMessage(
@@ -64,4 +70,23 @@ export async function sendChatMessage(
 			}
 		}
 	}
+}
+
+export async function fetchModels() {
+	const res = await fetch(BASE_URL + "/tags");
+
+	if (!res.ok) {
+		throw new Error("Failed to fetch Ollama models");
+	}
+
+	const data: OllamaTagsResponse = await res.json();
+	return data.models;
+}
+
+export async function fetchRunningModels(): Promise<Set<string>> {
+	const res = await fetch(BASE_URL + "/ps");
+	if (!res.ok) throw new Error("Failed to fetch running models");
+
+	const data = await res.json();
+	return new Set(data.models.map((m: { name: string }) => m.name));
 }

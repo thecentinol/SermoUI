@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { fetchModels, fetchRunningModels } from "@/services/OllamaApi";
 
 export type Theme =
 	| "default"
@@ -10,6 +11,26 @@ export type Theme =
 	| "solarized";
 
 type SettingsContentType = "storage" | "model" | "appearance";
+
+type ModelStatus = "running" | "stopped";
+
+export interface OllamaModels {
+	name: string;
+	modified_at: string;
+	size: number;
+	digest: string;
+	details: {
+		format: string;
+		family: string;
+		families: string[];
+		parameter_size: string;
+		quantization_level: string;
+	};
+}
+
+interface OllamaModelWithStatus extends OllamaModels {
+	status: ModelStatus;
+}
 
 export interface UIStore {
 	sidebarCollapsed: boolean;
@@ -22,6 +43,10 @@ export interface UIStore {
 
 	currentTheme: Theme;
 	setTheme: (theme: Theme) => void;
+
+	models: OllamaModelWithStatus[];
+	modelIsLoading: boolean;
+	loadModels: () => void;
 }
 
 const defaultActiveSettingsContent: SettingsContentType = "storage";
@@ -43,6 +68,28 @@ export const useUIStore = create<UIStore>()(
 
 			currentTheme: defaultTheme,
 			setTheme: (theme) => set({ currentTheme: theme }),
+
+			models: [],
+			modelIsLoading: false,
+
+			loadModels: async () => {
+				set({ modelIsLoading: true });
+
+				try {
+					const [installed, running] = await Promise.all([
+						fetchModels(),
+						fetchRunningModels(),
+					]);
+
+					const modelStatus: OllamaModelWithStatus[] = installed.map((m) => ({
+						...m,
+						status: running.has(m.name) ? "running" : "stopped",
+					}));
+					set({ models: modelStatus });
+				} finally {
+					set({ modelIsLoading: false });
+				}
+			},
 		}),
 		{
 			name: "ui-storage",
