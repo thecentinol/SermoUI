@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { sendChatMessage } from "../services/OllamaApi";
+import { sendChatMessage, sendMessage } from "@/services/OllamaApi";
 
 export interface Chat {
 	id: string;
@@ -19,12 +19,18 @@ export interface Message {
 	timestamp: number;
 }
 
+export type Response = {};
+
 interface ChatStore {
 	chats: Chat[];
+	// messages: Message[];
 	isLoading: boolean;
 	model: string;
 	setModel: (model: string) => void;
-	sendMsg: (chatId: string | null, content: string) => Promise<string | void>;
+	sendChatMsg: (
+		chatId: string | null,
+		content: string,
+	) => Promise<string | void>;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -36,7 +42,7 @@ export const useChatStore = create<ChatStore>()(
 				model: "llama3.2:1b",
 				setModel: (model) => set({ model }),
 
-				sendMsg: async (chatId: string | null, content: string) => {
+				sendChatMsg: async (chatId: string | null, content: string) => {
 					const { model, chats } = get();
 					set({ isLoading: true }, false, "sendMsg/start");
 

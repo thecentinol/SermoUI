@@ -10,7 +10,7 @@ export type Theme =
 	| "void"
 	| "solarized";
 
-type SettingsContentType = "storage" | "model" | "appearance";
+type SettingsContentType = "storage" | "models" | "appearance";
 
 type ModelStatus = "running" | "stopped";
 

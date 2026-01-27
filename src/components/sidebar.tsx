@@ -13,7 +13,13 @@ import {
 	StorageSettings,
 } from "@/components/settingsContent";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { useChatStore } from "@/stores/chatStore";
 import { useUIStore } from "@/stores/uiStore";
 
@@ -66,6 +72,12 @@ export default function Sidebar() {
 
 				<Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
 					<DialogContent className="flex">
+						<DialogHeader className="hidden">
+							<DialogTitle>Settings</DialogTitle>
+							<DialogDescription>
+								Settings for storage, models, theme
+							</DialogDescription>
+						</DialogHeader>
 						<div className="flex flex-col h-full w-[20%] border-r border-gray-400/50">
 							<Button
 								onClick={() => setActiveSettingsContent("storage")}
@@ -74,7 +86,7 @@ export default function Sidebar() {
 								<Database /> Storage
 							</Button>
 							<Button
-								onClick={() => setActiveSettingsContent("model")}
+								onClick={() => setActiveSettingsContent("models")}
 								className="flex items-center justify-start text-lg"
 							>
 								<Brain /> Models
@@ -92,7 +104,7 @@ export default function Sidebar() {
 								switch (activeSettingsContent) {
 									case "storage":
 										return <StorageSettings />;
-									case "model":
+									case "models":
 										return <ModelSettings />;
 									case "appearance":
 										return <AppearanceSettings />;

@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useChatStore } from "@/stores/chatStore";
 
 export default function Chat() {
-	const { sendMsg, isLoading } = useChatStore();
+	const { sendChatMsg, isLoading } = useChatStore();
 	const navigate = useNavigate();
 
 	const handleSendMsg = async (content: string) => {
-		const newChatId = await sendMsg(null, content);
+		const newChatId = await sendChatMsg(null, content);
 		if (newChatId) {
 			navigate(`/chat/${newChatId}`);
 		}
