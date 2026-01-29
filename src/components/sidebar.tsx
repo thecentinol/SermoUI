@@ -6,6 +6,7 @@ import {
 	PlusIcon,
 	Settings,
 } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
 	AppearanceSettings,
@@ -30,7 +31,7 @@ import { useChatStore } from "@/stores/chatStore";
 import { useUIStore } from "@/stores/uiStore";
 
 export default function Sidebar() {
-	const { chats, deleteChat } = useChatStore();
+	const { chats, deleteChat, renameChat } = useChatStore();
 	const navigate = useNavigate();
 	const {
 		settingsOpen,
@@ -38,6 +39,9 @@ export default function Sidebar() {
 		activeSettingsContent,
 		setActiveSettingsContent,
 	} = useUIStore();
+
+	const [renamingChatId, setRenamingChatId] = useState<string | null>(null);
+	const [draftTitle, setDraftTitle] = useState("");
 
 	return (
 		<div className="flex flex-col h-full w-[20%] bg-(--bg) text-(--text) pl-2 pr-3">
@@ -65,13 +69,44 @@ export default function Sidebar() {
 							onClick={() => navigate(`/chat/${c.id}`)}
 							className="flex items-center justify-between w-full px-4 py-2"
 						>
-							{c.title || "New Chat"}
+							{renamingChatId === c.id ? (
+								<input
+									autoFocus
+									value={draftTitle}
+									onChange={(e) => setDraftTitle(e.target.value)}
+									onBlur={() => {
+										renameChat(c.id, draftTitle.trim());
+									}}
+									onKeyDown={(e) => {
+										if (e.key === "Enter") {
+											renameChat(c.id, draftTitle.trim());
+										}
+										if (e.key === "Escape") {
+											setRenamingChatId(null);
+										}
+									}}
+									className="w-full outline-1"
+								/>
+							) : (
+								<span>{c.title || "New Chat"}</span>
+							)}
+
 							<DropdownMenu>
-								<DropdownMenuTrigger>
-									<Ellipsis className="cursor-pointer" />
+								<DropdownMenuTrigger asChild>
+									<span onClick={(e) => e.stopPropagation}>
+										<Ellipsis className="cursor-pointer" />
+									</span>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent>
-									<DropdownMenuItem>Rename</DropdownMenuItem>
+									<DropdownMenuItem
+										onClick={(e) => {
+											e.stopPropagation();
+											setRenamingChatId(c.id);
+											setDraftTitle(c.title || "New chat");
+										}}
+									>
+										Rename
+									</DropdownMenuItem>
 									<DropdownMenuItem
 										className="focus:bg-red-500"
 										onClick={() => deleteChat(c.id)}

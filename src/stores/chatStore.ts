@@ -32,6 +32,7 @@ interface ChatStore {
 		content: string,
 	) => Promise<string | void>;
 	deleteChat: (chatId: string) => void;
+	renameChat: (chatId: string, newTitle: string) => void;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -141,6 +142,19 @@ export const useChatStore = create<ChatStore>()(
 						}),
 						false,
 						"deleteChat",
+					);
+				},
+				renameChat: (chatId, newTitle) => {
+					set(
+						(state) => ({
+							chats: state.chats.map((chat) =>
+								chat.id === chatId
+									? { ...chat, title: newTitle, updatedAt: Date.now() }
+									: chat,
+							),
+						}),
+						false,
+						"renameChat",
 					);
 				},
 			}),
