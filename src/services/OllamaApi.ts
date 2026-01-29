@@ -74,7 +74,7 @@ export async function sendChatMessage(
 		buffer = lines.pop() || "";
 
 		for (const line of lines) {
-			if (line.trim()) continue;
+			if (!line.trim()) continue;
 
 			const parsed = JSON.parse(line);
 			onChunk(parsed);
@@ -121,7 +121,7 @@ export async function sendMessage(
 		buffer = lines.pop() || "";
 
 		for (const line of lines) {
-			if (line.trim()) {
+			if (!line.trim()) {
 				const parsed = JSON.parse(line);
 				onChunk(parsed);
 			}

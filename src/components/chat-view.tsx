@@ -9,7 +9,7 @@ import { useChatStore } from "@/stores/chatStore";
 export default function ChatView() {
 	const params = useParams();
 	const chatId = params?.chatId;
-	const { chats, sendMsg, isLoading } = useChatStore();
+	const { chats, sendChatMsg, isLoading } = useChatStore();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
 	const currChat = chatId ? chats.find((c) => c.id === chatId) : null;
@@ -22,7 +22,7 @@ export default function ChatView() {
 	}, [messages]);
 
 	const handleSendMsg = async (content: string) => {
-		await sendMsg(chatId || null, content);
+		await sendChatMsg(chatId || null, content);
 	};
 
 	return (
