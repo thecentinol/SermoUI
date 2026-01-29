@@ -19,7 +19,7 @@ export interface Message {
 	timestamp: number;
 }
 
-export type Response = {};
+// export type Response = {};
 
 interface ChatStore {
 	chats: Chat[];
@@ -31,6 +31,7 @@ interface ChatStore {
 		chatId: string | null,
 		content: string,
 	) => Promise<string | void>;
+	deleteChat: (chatId: string) => void;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -132,6 +133,15 @@ export const useChatStore = create<ChatStore>()(
 						set({ isLoading: false }, false, "sendMsg/end");
 					}
 					return actualChatId;
+				},
+				deleteChat: (chatId) => {
+					set(
+						(state) => ({
+							chats: state.chats.filter((chat) => chat.id !== chatId),
+						}),
+						false,
+						"deleteChat",
+					);
 				},
 			}),
 			{ name: "ollama-chats" },

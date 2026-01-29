@@ -20,11 +20,17 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useChatStore } from "@/stores/chatStore";
 import { useUIStore } from "@/stores/uiStore";
 
 export default function Sidebar() {
-	const { chats } = useChatStore();
+	const { chats, deleteChat } = useChatStore();
 	const navigate = useNavigate();
 	const {
 		settingsOpen,
@@ -60,7 +66,20 @@ export default function Sidebar() {
 							className="flex items-center justify-between w-full px-4 py-2"
 						>
 							{c.title || "New Chat"}
-							<Ellipsis className="cursor-pointer" />
+							<DropdownMenu>
+								<DropdownMenuTrigger>
+									<Ellipsis className="cursor-pointer" />
+								</DropdownMenuTrigger>
+								<DropdownMenuContent>
+									<DropdownMenuItem>Rename</DropdownMenuItem>
+									<DropdownMenuItem
+										className="focus:bg-red-500"
+										onClick={() => deleteChat(c.id)}
+									>
+										Delete
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
 						</Button>
 					))}
 				</div>
