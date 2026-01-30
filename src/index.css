@@ -4,7 +4,8 @@
 
 /* Fonts */
 :root {
-	font-family: "Quantico", system-ui, sans-serif
+	font-family: "Quantico", system-ui, sans-serif;
+	background: var(--bg)
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

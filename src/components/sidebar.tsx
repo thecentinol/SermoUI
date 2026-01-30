@@ -80,6 +80,7 @@ export default function Sidebar() {
 									onKeyDown={(e) => {
 										if (e.key === "Enter") {
 											renameChat(c.id, draftTitle.trim());
+											setRenamingChatId(null);
 										}
 										if (e.key === "Escape") {
 											setRenamingChatId(null);
