@@ -1,13 +1,14 @@
 import { ArrowUp } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { useChatStore } from "@/stores/chatStore";
 
 export default function ChatView({ disabled }: { disabled?: boolean }) {
 	const params = useParams();
+	const navigate = useNavigate();
 	const chatId = params?.chatId;
 	const { chats, sendChatMsg, isLoading } = useChatStore();
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -16,6 +17,12 @@ export default function ChatView({ disabled }: { disabled?: boolean }) {
 
 	const currChat = chatId ? chats.find((c) => c.id === chatId) : null;
 	const messages = useMemo(() => currChat?.messages || [], [currChat]);
+
+	useEffect(() => {
+		if (!currChat && chatId) {
+			navigate("/", { replace: true });
+		}
+	});
 
 	useEffect(() => {
 		if (scrollRef.current) {
