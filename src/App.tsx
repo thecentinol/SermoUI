@@ -1,14 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Chat from "@/components/chat";
 import ChatView from "@/components/chat-view";
-import Layout from "@/components/layout";
+import Layout from "@/layout";
 
 function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Layout />}>
-					<Route index element={<Chat />}></Route>
+					<Route index element={<Chat disabled />}></Route>
 					<Route path="/chat/:chatId" element={<ChatView />}></Route>
 				</Route>
 			</Routes>
