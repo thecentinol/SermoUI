@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useUIStore } from "@/stores/uiStore";
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export function ThemeProvider({ children }: { children: ReactNode }) {
 	const { currentTheme } = useUIStore();
 
 	useEffect(() => {

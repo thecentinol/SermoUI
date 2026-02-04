@@ -47,6 +47,10 @@ export interface UIStore {
 	models: OllamaModelWithStatus[];
 	modelIsLoading: boolean;
 	loadModels: () => void;
+	selectedModels: string[] | null;
+	setSelectedModels: (models: string[] | null) => void;
+	modelModalOpen: boolean;
+	setModelModalOpen: (open: boolean) => void;
 }
 
 const defaultActiveSettingsContent: SettingsContentType = "storage";
@@ -71,6 +75,10 @@ export const useUIStore = create<UIStore>()(
 
 			models: [],
 			modelIsLoading: false,
+			selectedModels: null,
+			setSelectedModels: (models) => set({ selectedModels: models }),
+			modelModalOpen: false,
+			setModelModalOpen: (open) => set({ modelModalOpen: open }),
 
 			loadModels: async () => {
 				set({ modelIsLoading: true });
