@@ -40,3 +40,14 @@ git clone https://github.com/thecentinol/SermoUI.git
 cd sermoui
 bun vite
 ```
+
+## Project status
+SermoUI is in early development.
+Expect breaking changes and incomplete features.
+
+## Roadmap
+- Model comparison view
+- Better session history
+- Prompt templates
+- Export results
+- Cloud API support (optional)
