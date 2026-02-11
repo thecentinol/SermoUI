@@ -1,4 +1,4 @@
-import { Ellipsis, PlusIcon } from "lucide-react";
+import { Ellipsis, File, PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useChatStore } from "@/stores/chatStore";
+import { useChatStore } from "@/features/chat/store/chatStore";
 
 export default function Sidebar() {
 	const { chats, deleteChat, renameChat } = useChatStore();
@@ -23,14 +23,17 @@ export default function Sidebar() {
 				<img src="/logo.svg" alt="logo" width={35} height={35} />
 				SermoUI
 			</h1>
-			<div className="h-[12%]">
-				<p className="text-(--text-muted) pl-1">Actions</p>
+			<div className="h-[12%] mb-2">
 				<Button
 					onClick={() => navigate("/")}
 					className="justify-start w-full p-1"
 				>
 					<PlusIcon />
 					New Chat
+				</Button>
+				<Button className="w-full justify-start p-1">
+					<File />
+					Prompts
 				</Button>
 			</div>
 

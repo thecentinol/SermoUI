@@ -1,4 +1,4 @@
-import type { OllamaModels } from "@/stores/uiStore";
+import type { OllamaModels } from "@/stores/ui.store";
 
 const BASE_URL = "http://localhost:11434/api";
 

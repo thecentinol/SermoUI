@@ -7,12 +7,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import {
-	AppearanceSettings,
-	ModelSettings,
-	StorageSettings,
-} from "@/components/settingsContent";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/shared/sidebar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -31,8 +26,13 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	AppearanceSettings,
+	ModelSettings,
+	StorageSettings,
+} from "@/features/settings/components/settings-content";
 import { ThemeProvider } from "@/providers/themeProvider";
-import { useUIStore } from "@/stores/uiStore";
+import { useUIStore } from "@/stores/ui.store";
 
 export default function Layout() {
 	const {

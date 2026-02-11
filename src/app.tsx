@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Chat from "@/components/chat";
-import ChatView from "@/components/chat-view";
-import Layout from "@/layout";
-import { useChatStore } from "@/stores/chatStore";
+import Chat from "@/features/chat/components/chat";
+import ChatView from "@/features/chat/components/chat-view";
+import { useChatStore } from "@/features/chat/store/chatStore";
+import Layout from "@/layout/main-layout";
 
 function App() {
 	const { isLoading } = useChatStore();

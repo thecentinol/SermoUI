@@ -1,14 +1,34 @@
 import { ArrowUp } from "lucide-react";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { useNavigate, useParams } from "react-router-dom";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
-import { useChatStore } from "@/stores/chatStore";
+import { useChatStore } from "@/features/chat/store/chatStore";
 
-export default function Chat({ disabled }: { disabled: boolean }) {
-	const { sendChatMsg, isLoading } = useChatStore();
+export default function ChatView({ disabled }: { disabled?: boolean }) {
+	const params = useParams();
 	const navigate = useNavigate();
+	const chatId = params?.chatId;
+	const { chats, sendChatMsg, isLoading } = useChatStore();
+	const scrollRef = useRef<HTMLDivElement>(null);
 	const [message, setMessage] = useState("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+	const currChat = chatId ? chats.find((c) => c.id === chatId) : null;
+	const messages = useMemo(() => currChat?.messages || [], [currChat]);
+
+	useEffect(() => {
+		if (!currChat && chatId) {
+			navigate("/", { replace: true });
+		}
+	});
+
+	useEffect(() => {
+		if (scrollRef.current) {
+			scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+		}
+	}, [messages]);
 
 	const adjustHeight = () => {
 		const textarea = textareaRef.current;
@@ -23,20 +43,40 @@ export default function Chat({ disabled }: { disabled: boolean }) {
 
 	const handleSend = async (message: string) => {
 		if (message.trim() && !disabled) {
-			const newChatId = await sendChatMsg(null, message);
-			if (newChatId) {
-				navigate(`/chat/${newChatId}`);
-			}
+			await sendChatMsg(chatId || null, message);
 			setMessage("");
 			setTimeout(adjustHeight, 0);
 		}
 	};
 
 	return (
-		<div className="flex flex-1 text-(--text) h-[95%]">
+		<div className="flex flex-1 h-[95%]">
 			<div className="flex-1 flex justify-center items-center">
-				<div className="flex flex-col h-full w-[50vw] gap-4 items-center justify-center text-center">
-					<a className="text-6xl w-full font-extrabold">Send message or gay</a>
+				<div className="flex flex-col h-full w-[50vw]">
+					<div
+						ref={scrollRef}
+						className="flex-1 overflow-y-auto scrollbar-hide p-4 pb-32"
+					>
+						{messages.map((msg) => (
+							<div
+								key={msg.id}
+								className={`p-3 my-2 rounded-2xl ${
+									msg.role === "user"
+										? "bg-(--bg) self-end ml-auto text-white max-w-[70%] w-fit"
+										: "bg-transparent self-start mr-auto text-gray-200 w-full"
+								}`}
+								style={{
+									minWidth: `${Math.min(msg.content.length * 8, 300)}px`,
+								}}
+							>
+								<div className="markdown-body prose prose-invert">
+									<ReactMarkdown remarkPlugins={[remarkGfm]}>
+										{msg.content}
+									</ReactMarkdown>
+								</div>
+							</div>
+						))}
+					</div>
 
 					<div
 						className="flex items-center justify-between m-4 w-full px-4 bg-(--fg-elevated)"

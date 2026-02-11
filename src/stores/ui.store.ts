@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { fetchModels, fetchRunningModels } from "@/services/OllamaApi";
+import {
+	fetchModels,
+	fetchRunningModels,
+} from "@/features/chat/api/api.ollama";
 
 export type Theme =
 	| "default"

@@ -17,7 +17,7 @@ export function StorageSettings() {
 					<SelectTrigger>
 						<SelectValue placeholder="Select storage" />
 					</SelectTrigger>
-					<SelectContent>
+					<SelectContent className="bg-(--fg)" position="popper">
 						<SelectItem value="localStorage">localStorage</SelectItem>
 						<SelectItem value="postgresql">PostgreSQL</SelectItem>
 					</SelectContent>

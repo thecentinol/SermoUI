@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { sendChatMessage, sendMessage } from "@/services/OllamaApi";
+import { sendChatMessage } from "@/features/chat/api/api.ollama";
 
 export interface Chat {
 	id: string;
@@ -19,11 +19,8 @@ export interface Message {
 	timestamp: number;
 }
 
-// export type Response = {};
-
 interface ChatStore {
 	chats: Chat[];
-	// messages: Message[];
 	isLoading: boolean;
 	model: string;
 	setModel: (model: string) => void;
