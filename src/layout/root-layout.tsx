@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { Provider } from "@/app/provider";
 import Sidebar from "@/components/shared/sidebar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -31,10 +32,9 @@ import {
 	ModelSettings,
 	StorageSettings,
 } from "@/features/settings/components/settings-content";
-import { ThemeProvider } from "@/providers/themeProvider";
 import { useUIStore } from "@/stores/ui.store";
 
-export default function Layout() {
+export default function RootLayout() {
 	const {
 		settingsOpen,
 		setSettingsOpen,
@@ -54,7 +54,7 @@ export default function Layout() {
 	}, [loadModels]);
 
 	return (
-		<ThemeProvider>
+		<Provider>
 			<div className="flex w-screen h-screen bg-(--bg) p-2 overflow-auto">
 				<Sidebar />
 				<main className="w-full h-full bg-(--fg) rounded-2xl">
@@ -152,6 +152,6 @@ export default function Layout() {
 					</div>
 				</DialogContent>
 			</Dialog>
-		</ThemeProvider>
+		</Provider>
 	);
 }

@@ -6,7 +6,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { type Theme, useUIStore } from "@/stores/uiStore";
+import { type Theme, useUIStore } from "@/stores/ui.store";
 
 export function StorageSettings() {
 	return (
